@@ -2,5 +2,6 @@
 
 FactoryBot.define do 
   factory :reservation do 
+    association :guest
   end 
 end 
