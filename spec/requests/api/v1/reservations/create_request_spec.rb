@@ -99,7 +99,7 @@ describe 'Create reservation V2 format', type: :request do
         post '/api/v1/reservations/', params: v2_format_params
       end
 
-      it 'returns http status of :ok' do
+      it 'returns http status of :created' do
         expect(response).to have_http_status(:created)
       end
 
@@ -115,7 +115,7 @@ describe 'Create reservation V2 format', type: :request do
         post '/api/v1/reservations/', params: v2_format_params
       end
 
-      it 'returns http status of :ok' do
+      it 'returns http status of :unprocessable_entity' do
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
