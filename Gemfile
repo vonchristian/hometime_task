@@ -7,7 +7,6 @@ ruby "3.1.2"
 gem "rails", "~> 7.0.3"
 gem 'active_interaction', '~> 5.0'
 gem 'jsonapi-serializer'
-gem 'pry-rails'
 gem 'email_validator'
 gem 'money-rails', '~>1.12'
 
@@ -44,10 +43,18 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'factory_bot_rails'
+  gem 'pry-rails'
+  gem 'rspec-rails'
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
+
+group :test do 
+  gem 'database_cleaner-active_record'
+  gem 'shoulda-matchers'
+end 
 
