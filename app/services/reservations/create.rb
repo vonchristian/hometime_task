@@ -9,16 +9,11 @@ module Reservations
     decimal :total_price, :security_price, :payment_price
     date :start_date, :end_date
 
-    validates :start_date, presence: true
-    validates :end_date,   presence: true
-    validates :nights,     presence: true
-    validates :adults,     presence: true
-    validates :children,   presence: true
-    validates :infants,    presence: true
-    validates :payment_price, presence: true 
-    validates :total_price, presence: true 
-    validates :security_price, presence: true
-    validates :status,     presence: true, inclusion: { in: Reservation.statuses.keys } 
+    validates :start_date, :end_date, :nights, :adults, :children,  
+              :infants, :payment_price, :total_price, :security_price, presence: true
+    
+    validates :status, presence: true, inclusion: { in: Reservation.statuses.keys } 
+    
     def execute 
       ApplicationRecord.transaction do
         create_guest
