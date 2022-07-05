@@ -34,7 +34,7 @@ module API
         outcome = Reservations::Create.run(reservation_params)
 
         if outcome.valid?
-          success_response_with_top_level_message(ReservationSerializer.new(outcome.result))
+          success_response_with_top_level_message(ReservationSerializer.new(outcome.result), :created)
         else
           error_response(ErrorSerializer.serialize(outcome), :unprocessable_entity)
         end

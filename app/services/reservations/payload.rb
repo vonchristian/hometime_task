@@ -43,15 +43,15 @@ module Reservations
     end 
 
     def email 
-      params.dig(:guest_email) || params.dig(:reservation, :guest_email)
+      params.dig(:guest, :email) || params.dig(:reservation, :guest_email)
     end 
 
     def first_name 
-      params.dig(:first_name) || params.dig(:reservation, :guest_first_name)
+      params.dig(:guest, :first_name) || params.dig(:reservation, :guest_first_name)
     end
     
     def last_name 
-      params.dig(:last_name) || params.dig(:reservation, :guest_last_name)
+      params.dig(:guest, :last_name) || params.dig(:reservation, :guest_last_name)
     end
   
     def start_date
