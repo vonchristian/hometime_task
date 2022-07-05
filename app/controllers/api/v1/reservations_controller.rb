@@ -4,24 +4,24 @@ module API
   module V1 
     class ReservationsController < ApplicationController 
       def create 
-        return json_error_response unless run_validations.valid?
-        return update_reservation if reservation.present?
-        
-        create_reservation 
+        return json_error_response unless validate_params.valid?
+        return create_reservation if reservation.blank?
+
+        update_reservation 
       end 
 
       private 
       
-      def run_validations
-        @validations ||= Reservations::Validation.run(payload)
+      def validate_params
+        @validate_params ||= Reservations::Validation.run(reservation_params)
       end 
       
       def json_error_response
-        error_response(ErrorSerializer.serialize(@validations).to_json, :unprocessable_entity)
+        error_response(ErrorSerializer.serialize(@validate_params).to_json, :unprocessable_entity)
       end 
 
       def update_reservation
-        outcome = Reservations::Update.run(update_reservation_payload.merge!(reservation: reservation))
+        outcome = Reservations::Update.run(update_reservation_params.merge!(reservation: reservation))
 
         if outcome.valid?
           success_response_with_top_level_message(ReservationSerializer.new(outcome.result))
@@ -31,7 +31,7 @@ module API
       end
 
       def create_reservation
-        outcome = Reservations::Create.run(payload)
+        outcome = Reservations::Create.run(reservation_params)
 
         if outcome.valid?
           success_response_with_top_level_message(ReservationSerializer.new(outcome.result))
@@ -40,16 +40,12 @@ module API
         end
       end
 
-      def payload
-        Reservations::Payload.generate(
-          params.merge!(
-            reservation_code: reservation_code
-          )
-        )
+      def reservation_params
+        @reservation_params ||= Reservations::Payload.generate(params)
       end
 
-      def update_reservation_payload
-        payload.slice(
+      def update_reservation_params
+        reservation_params.slice(
           :start_date, 
           :end_date,
           :nights,
@@ -60,12 +56,8 @@ module API
         )
       end
 
-      def reservation_code 
-        params.dig(:reservation_code) || params.dig(:reservation, :code)
-      end
-
       def reservation
-        @reservation ||= Reservation.find_by(code: reservation_code)
+        @reservation ||= Reservation.find_by(code: reservation_params.dig(:code))
       end
     end 
   end 

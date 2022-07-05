@@ -1,7 +1,7 @@
 
 module Reservations 
   class Payload
-    attr_reader :params, :reservation_code
+    attr_reader :params
 
     def self.generate(args = {})
       obj = new(args)
@@ -9,8 +9,7 @@ module Reservations
     end 
 
     def initialize(args = {})
-      @params           = args 
-      @reservation_code = args.fetch(:reservation_code)
+      @params = args 
     end
 
     def run 
@@ -39,6 +38,10 @@ module Reservations
       }
     end
     
+    def reservation_code 
+      params.dig(:reservation_code) || params.dig(:reservation, :code)
+    end 
+
     def email 
       params.dig(:guest_email) || params.dig(:reservation, :guest_email)
     end 
